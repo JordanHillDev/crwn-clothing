@@ -9,7 +9,7 @@ const config = {
   storageBucket: "crown-clothing-cf1a4.appspot.com",
   messagingSenderId: "507521761630",
   appId: "1:507521761630:web:75a4a36f1e729f1afa4fcf",
-  measurementId: "G-HT3R2FG1LC"
+  measurementId: "G-HT3R2FG1LC",
 };
 
 firebase.initializeApp(config);
@@ -40,7 +40,38 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   return userRef;
 };
 
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
 
+  const batch = firestore.batch();
+  objectsToAdd.forEach((obj) => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj);
+  });
+
+  return await batch.commit();
+};
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {});
+};
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

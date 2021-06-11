@@ -7,12 +7,12 @@ import {
   removeItem,
 } from "../../redux/cart/cart.actions";
 
-import "./checkout-item.styles.scss";
+import { CheckoutItemContainer } from './checkout-item.styles';
 
 const CheckoutItem = ({ cartItem, clearItem, addItem, removeItem }) => {
   const { name, imageUrl, price, quantity } = cartItem;
   return (
-    <div className="checkout-item">
+    <CheckoutItemContainer>
       <div className="image-container">
         <img src={imageUrl} alt="item" />
       </div>
@@ -26,7 +26,7 @@ const CheckoutItem = ({ cartItem, clearItem, addItem, removeItem }) => {
       <div className="remove-button" onClick={() => clearItem(cartItem)}>
         &#10005;
       </div>
-    </div>
+    </CheckoutItemContainer>
   );
 };
 
